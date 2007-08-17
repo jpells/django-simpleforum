@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Forums" %}{% endblock %}
+{% block breadcrumb %}<li class="last">{% trans "Forums" %}</li>{% endblock %}
+{% block content %}
+    {% for category in object_list %}
+	    <h1>{% blocktrans %}{{ category }}{% endblocktrans %}</h1>
+    	{% for forum in category.forum_set.all %}
+	    	<a href="{{ forum.get_absolute_url }}">{% blocktrans %}{{ forum }}{% endblocktrans %}</a> {% blocktrans with forum.description as description %}{{ description }}{% endblocktrans %}
+    	{% endfor %}
+    {% endfor %}
+{% endblock %}

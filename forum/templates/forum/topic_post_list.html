@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% blocktrans with topic.forum|title as forum_title and topic|title as topic_title %}{{ forum_title }} {{ topic_title }}{% endblocktrans %}{% endblock %}
+{% block breadcrumb %}<li><a href="/forum/">{% trans "Forum" %}</a></li> <li><a href="{{ topic.forum.get_absolute_url }}">{% blocktrans with topic.forum|title as forum_title %}{{ forum_title }}{% endblocktrans %}</a></li> <li class="last">{% blocktrans with topic|title as topic_title %}{{ topic_title }}{% endblocktrans %}</li>{% endblock %}
+{% block content %}
+{% if is_paginated %}{% load paginator %}<div class="paginator">{% paginator %}</div>{% endif %}
+{% if not topic.locked %}
+<a href="{{ topic.get_absolute_url }}create/">{% trans "Add New Post" %}</a>
+{% endif %}
+<table>
+<tr><td>{% trans "User" %}</td> <td>{% trans "Date Published" %}</td> <td>{% trans "Post" %}</td></tr>
+{% for object in object_list %}
+<tr><td><img src="{{ post.user.get_profile.get_avatar_url }}" /><a href="{{ object.user.get_absolute_url }}">{{ object.user }}</a>{% load iptocountry_filter %}{{ object.ip_address|get_country2:"iptocountry/flags/"}}</td> <td>{{ object.pub_date|date:"F j Y" }}</td> <td>{% blocktrans with object.text as object_text %}{{ object_text }}{% endblocktrans %}<a name="post_{{ object.id }}" /></td></tr>
+{% endfor %}
+</table>
+{% if is_paginated %}{% load paginator %}<div class="paginator">{% paginator %}</div>{% endif %}
+{% endblock %}

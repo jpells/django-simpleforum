@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Forums" %}{% endblock %}
+{% block extrahead %}
+{% load adminmedia %}<script type="text/javascript" src="{% admin_media_prefix %}js/urlify.js"></script>
+{% endblock %}
+{% block breadcrumb %}<li><a href="/forums/">{% trans "Forums" %}</a></li> <li><a href="{{ topic.forum.get_absolute_url }}">{% blocktrans with topic.forum|title as forum_title %}{{ forum_title }}{% endblocktrans %}</a></li> <li><a href="{{ topic.get_absolute_url }}">{% blocktrans with topic|title as topic_title %}{{ topic_title }}{% endblocktrans %}</a></li><li class="last">{% trans "New Topic" %}</li>{% endblock %}
+{% block content %}
+{% if form.has_errors %}
+<h2>{% blocktrans count form.errors as counter %}
+Please correct the following error.
+{% plural %}
+Please correct the following errors.
+{% endblocktrans %}:</h2>
+{{ form.errors }}
+{% endif %}
+
+<form method="post" action=".">
+<input type="hidden" id="id_topic" class="vSelectField required" name="topic" size="1" value="{{ topic.id }}">
+<input type="hidden" id="id_user" class="vSelectField required" name="user" value="{{ user.id }}">
+<input type="hidden" id="id_state" class="vSelectField required" name="state" value="{{ STATE_DEFAULT  }}">
+<input type="hidden" id="id_ip_address" class="vIPAddressField required" name="ip_address" size="15" value="{{ request.META.REMOTE_ADDR }}" maxlength="15" />
+<input type="hidden" id="id_slug" class="vTextField" name="slug" value="" />
+<p><label for="id_title">{% trans "Title" %}:</label> {{ form.title }}
+{% if form.title.errors %}*** {% blocktrans %}{{ form.title.errors|join:", " }}{% endblocktrans %}{% endif %}</p>
+<p><label for="id_text">{% trans "Text" %}:</label> {{ form.text }}
+{% if form.text.errors %}*** {% blocktrans %}{{ form.text.errors|join:", " }}{% endblocktrans %}{% endif %}</p>
+<input value="{% blocktrans %}New Post{% endblocktrans %}" type="submit" />
+</form>
+<script type="text/javascript">
+        document.getElementById("id_slug").onchange = function() { this._changed = true; };document.getElementById("id_title").onkeyup = function() { var e = document.getElementById("id_slug"); if(!e._changed) { e.value = URLify(document.getElementById("id_title").value, 50);} }; 
+</script>
+{% endblock %}

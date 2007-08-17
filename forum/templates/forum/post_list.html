@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% blocktrans %}{{ topic.forum|title }} {{ topic|title }}{% endblocktrans %}{% endblock %}
+{% block breadcrumb %}<li><a href="/forum/">{% trans "Forum" %}</a></li> <li><a href="{{ topic.forum.get_absolute_url }}">{% blocktrans %}{{ topic.forum|title }}{% endblocktrans %}</a></li> <li class="last">{% blocktrans %}{{ topic|title }}{% endblocktrans %}</li>{% endblock %}
+{% block content %}
+{% if is_paginated %}{% load paginator %}<div class="paginator">{% paginator %}</div>{% endif %}
+{% if not topic.locked %}
+<a href="{{ topic.get_absolute_url }}create/">{% trans "Add New Post" %}</a>
+{% endif %}
+<table>
+{% load sorter %}
+<tr><td>{% sorter "topic" "Topic" %}</td> <td>{% sorter "user" "User" %}</td> <td>{% sorter "pub_date" "Date Published" %}</td> <td>{% sorter "text" "Post" %}</td></tr>
+{% for object in object_list %}
+<tr><td><a href="{{ object.topic.get_absolute_url }}">{% blocktrans %}{{ object.topic }}{% endblocktrans %}</a></td> <td><img src="{{ post.user.get_profile.get_avatar_url }}" /><a href="{{ object.user.get_absolute_url }}">{{ object.user }}</a>{% load iptocountry_filter %}{{ object.ip_address|get_country2:"iptocountry/flags/"}}</td> <td>{{ object.pub_date|date:"F j Y" }}</td> <td><a name="post_{{ object.id }}" /><a href="{{ object.get_absolute_url }}">{% blocktrans %}{{ object.text }}{% endblocktrans %}</a></td></tr>
+{% endfor %}
+</table>
+{% if is_paginated %}{% load paginator %}<div class="paginator">{% paginator %}</div>{% endif %}
+{% endblock %}
