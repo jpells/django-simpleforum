@@ -4,7 +4,7 @@ from django.views.generic.list_detail import object_list
 from django.views.generic.create_update import create_object
 from django import newforms as forms
 from forum.models import Topic, Post, Forum
-from common.views.views import sorted_paginated_authored_archived_list
+from sorted_paginated_authored_archived_list_view.views import sorted_paginated_authored_archived_list
 from django.conf import settings
 
 def topic_list(request, slug=None, username=None, sort_field=None, paginate_by=10):

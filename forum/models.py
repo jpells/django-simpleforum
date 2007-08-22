@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from published_manager.managers import PublishedManager
 
 class Category(models.Model):
     """
@@ -101,6 +102,8 @@ class Topic(models.Model):
     ip_address = models.IPAddressField(verbose_name=_("Author's IP Address"))
     state = models.CharField(maxlength=1, choices=settings.STATE_CHOICES, default=settings.STATE_DEFAULT, verbose_name=_("State of object"))
     slug = models.SlugField(prepopulate_from=('name',), unique=True, verbose_name=_("Slug Field"))
+    objects = models.Manager()
+    published_objects = PublishedManager()
 
     def get_absolute_url(self):
         return "/forum/topic/%d/" % self.id
@@ -161,6 +164,8 @@ class Post(models.Model):
     mod_date = models.DateTimeField(auto_now = True, verbose_name=_("Date Modified"))
     ip_address = models.IPAddressField(verbose_name=_("Author's IP Address"))
     state = models.CharField(maxlength=1, choices=settings.STATE_CHOICES, default=settings.STATE_DEFAULT, verbose_name=_("State of object"))
+    objects = models.Manager()
+    published_objects = PublishedManager()
 
     def get_absolute_url(self):
         return "/forum/topic/%d/#post_%d" % (self.topic.id, self.id)
