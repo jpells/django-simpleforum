@@ -2,6 +2,7 @@ from django.contrib.syndication.feeds import Feed
 from django.utils.feedgenerator import Atom1Feed
 from forum.models import Post
 from django.conf import settings
+from django.utils.translation import ugettext as _
 
 class RssFeed(Feed):
     title = _("Forum")
