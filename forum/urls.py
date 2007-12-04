@@ -4,7 +4,6 @@ from forum.feeds import RssFeed, AtomFeed
         
 category_dict = { 
     'queryset': Category.objects.all(),
-    'allow_empty': 'true',
 }
 
 feeds = { 
